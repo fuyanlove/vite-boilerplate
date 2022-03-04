@@ -1,21 +1,38 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from "@/components/HelloWorld.vue";
+
+import { provide, reactive, computed } from "vue";
+import { useHead } from "@vueuse/head";
+import { title, keys, desc } from "../setting.json";
+const SEO = reactive({
+    title: title,
+    description: desc,
+    keywords: keys,
+});
+
+useHead({
+    title: computed(() => SEO.title),
+    meta: [
+        {
+            name: `description`,
+            content: computed(() => SEO.description),
+        },
+        {
+            name: `keywords`,
+            content: computed(() => SEO.keywords),
+        },
+    ],
+});
+
+provide("SEO", SEO);
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+    <img alt="Vue logo" src="@/assets/img/logo.png" />
+    <!-- <HelloWorld msg="Hello World" /> -->
+    <router-view />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="less">
+@import "@/assets/css/app.less";
 </style>
