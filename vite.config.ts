@@ -1,17 +1,17 @@
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
+import svgLoader from "vite-svg-loader";
 import { resolve } from "path";
-import getStaticPath from "./helper/static_path";
+import setting from "./setting.json";
 
 export default ({ command, mode }) => {
     return defineConfig({
-
         // 🐳:multiple pages
         build: {
             rollupOptions: {
                 input: {
                     main: resolve(__dirname, "index.html"),
-                    subpage: resolve(__dirname, "subpage/index.html"),
+                    // $subpage: resolve(__dirname, "pages/$subpage.html"),
                 },
             },
         },
@@ -19,20 +19,20 @@ export default ({ command, mode }) => {
         // 🌈:cross-origin
         server: {
             proxy: {
-                "/api/vip": {
-                    target: "https://pay.jx3box.com",
-                    changeOrigin: true,
-                    // 前端请求路径不变，用于后端灰度测试替换为测试路径
-                    // rewrite: (path) => path.replace(/^\/api/, ""),
-                    // configure: (proxy, options) => {
-                    // proxy 是 'http-proxy' 的实例
-                    // }
-                },
+                // "/path": {
+                // target: "https://remote",
+                // changeOrigin: true,
+                // 前端请求路径不变，用于后端灰度测试替换为测试路径
+                // rewrite: (path) => path.replace(/^\/api/, ""),
+                // configure: (proxy, options) => {
+                // proxy 是 'http-proxy' 的实例
+                // }
+                // },
             },
         },
 
         // 📦:CDN
-        base: mode == "development" ? "/" : getStaticPath(loadEnv(mode, process.cwd()).VITE_STATIC_PATH),
+        base: mode == "development" ? "/" : loadEnv(mode, process.cwd()).VITE_STATIC_PATH,
 
         // 🌸:alias @ for ./src
         resolve: {
@@ -42,9 +42,9 @@ export default ({ command, mode }) => {
         // ❄️:css mixins & global vars
         css: {
             preprocessorOptions: {
-                scss: {
-                    additionalData: `$injectedColor: orange;`,
-                },
+                // scss: {
+                // additionalData: `$injectedColor: orange;`,
+                // },
                 less: {
                     globalVars: {
                         hack: `true;
@@ -56,6 +56,6 @@ export default ({ command, mode }) => {
         },
 
         // 🍬:loaders
-        plugins: [vue()],
+        plugins: [vue(), svgLoader()],
     });
 };
