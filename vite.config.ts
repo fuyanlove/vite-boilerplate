@@ -2,7 +2,6 @@ import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import svgLoader from "vite-svg-loader";
 import { resolve } from "path";
-import setting from "./setting.json";
 
 export default ({ command, mode }) => {
     return defineConfig({
@@ -32,7 +31,7 @@ export default ({ command, mode }) => {
         },
 
         // 📦:CDN
-        base: mode == "development" ? "/" : loadEnv(mode, process.cwd()).VITE_STATIC_PATH,
+        base: mode == "development" ? "/" : loadEnv(mode, process.cwd()).STATIC_PATH,
 
         // 🌸:alias @ for ./src
         resolve: {
